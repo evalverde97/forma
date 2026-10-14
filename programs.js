@@ -133,7 +133,8 @@ function generateProgram({ objective, place, level, days }) {
   });
 
   return {
-    name: `${obj.name} · ${days} días · ${PLACES[place].name}`,
+    // Nombre y notas se guardan en español (idioma base); i18n.js los traduce al mostrarlos
+    name: `${obj.nameEs || obj.name} · ${days} días · ${PLACES[place].nameEs || PLACES[place].name}`,
     objective, place, level, rest: obj.main ? 150 : obj.rest,
     notes: [
       'Calentá 5–10 minutos antes: movilidad de articulaciones y 1–2 series livianas del primer ejercicio.',
@@ -141,7 +142,7 @@ function generateProgram({ objective, place, level, days }) {
       `Cuando completes todas las series en el tope del rango (${rangeTxt(obj.reps)}), subí el peso: 2,5 kg en barra o 1–2 kg en mancuernas. Sin peso: más reps o una variante más difícil.`,
       obj.group === 2 ? 'Los ejercicios del mismo bloque se hacen en superserie: uno después del otro y recién ahí descansás.' : '',
       obj.group === 3 ? 'Cada bloque es un circuito: hacé los ejercicios seguidos y descansá al terminar la vuelta.' : '',
-      obj.tip,
+      obj.tipEs || obj.tip,
     ].filter(Boolean),
     days: dayList,
   };

@@ -1,8 +1,8 @@
 // Cache del "app shell" para que funcione sin internet.
 // Subí CACHE cada vez que publiques cambios, así el iPhone toma la versión nueva.
-const CACHE = 'forma-v3';
+const CACHE = 'forma-v4';
 const ASSETS = [
-  './', './index.html', './styles.css', './app.js', './catalog.js', './programs.js', './nutrition.js', './manifest.webmanifest',
+  './', './index.html', './styles.css', './app.js', './catalog.js', './programs.js', './nutrition.js', './i18n.js', './manifest.webmanifest',
   './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png',
 ];
 
@@ -19,10 +19,14 @@ self.addEventListener('activate', (e) => {
 });
 
 // Red primero (para tomar actualizaciones), cache como respaldo sin conexión.
+// El código se revalida siempre con el servidor (no-cache) para que los cambios publicados se vean enseguida;
+// las imágenes de ejercicios no cambian, así que usan el cache normal del navegador.
 self.addEventListener('fetch', (e) => {
-  if (e.request.method !== 'GET' || new URL(e.request.url).origin !== location.origin) return;
+  const url = new URL(e.request.url);
+  if (e.request.method !== 'GET' || url.origin !== location.origin) return;
+  const isImg = url.pathname.includes('/img/');
   e.respondWith(
-    fetch(e.request)
+    fetch(isImg ? e.request : new Request(e.request.url, { cache: 'no-cache', credentials: 'same-origin' }))
       .then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(e.request, copy));
