@@ -23,7 +23,7 @@ const icon = (n, c = 'ic') => `<svg class="${c}" viewBox="0 0 24 24">${P[n]}</sv
 
 /* ================= Datos guardados ================= */
 const STORE_KEY = 'forma:simple';
-const defaults = () => ({ kcal: 3000, done: {}, shop: { period: 'semana', got: {} } });
+const defaults = () => ({ kcal: 3000, done: {}, habits: {}, shop: { period: 'semana', got: {} } });
 function load() {
   try {
     const d = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
@@ -38,6 +38,38 @@ function save() {
 
 const today = new Date().getDay();
 const UI = { train: WEEK_ROUTINE[today] || ['pt', 'A'], foodDay: today };
+
+/* ================= Hábitos diarios ================= */
+const HABITS = [
+  { key: 'meditar', name: 'Meditar' },
+  { key: 'leer', name: 'Leer' },
+  { key: 'estudiar', name: 'Estudiar' },
+  { key: 'journaling', name: 'Journaling' },
+];
+const dayKeyBack = (n) => { const d = new Date(); d.setDate(d.getDate() - n); return keyOf(d); };
+const habitDone = (key, k) => !!S.habits[k]?.[key];
+// Días seguidos: cuenta hacia atrás desde hoy (o desde ayer si hoy todavía no lo marcaste)
+function habitStreak(key) {
+  let n = 0;
+  for (let i = habitDone(key, todayKey()) ? 0 : 1; habitDone(key, dayKeyBack(i)); i++) n++;
+  return n;
+}
+function habitsCard() {
+  const k = todayKey();
+  const doneToday = HABITS.filter((h) => habitDone(h.key, k)).length;
+  const rows = HABITS.map((h) => {
+    const on = habitDone(h.key, k), streak = habitStreak(h.key);
+    const dots = [6, 5, 4, 3, 2, 1, 0].map((i) => `<i class="${habitDone(h.key, dayKeyBack(i)) ? 'on' : ''}"></i>`).join('');
+    return `<button class="habit-row ${on ? 'done' : ''}" data-act="habit" data-h="${h.key}">
+      <span class="ex-check">${on ? icon('check', '') : ''}</span>
+      <span class="grow" style="text-align:left"><span class="habit-name">${tx(h.name)}</span>
+        <span class="faint small">${streak ? (streak === 1 ? tx('1 día seguido') : tx('{n} días seguidos', { n: streak })) : tx('Empezá hoy')}</span></span>
+      <span class="habit-dots">${dots}</span></button>`;
+  }).join('');
+  return `<div class="card home-card">
+    <div class="card-title"><div><div class="eyebrow">${tx('Hábitos')}</div><h3>${doneToday === HABITS.length ? tx('Todo hecho hoy ✓') : tx('{a} de {b} hoy', { a: doneToday, b: HABITS.length })}</h3></div></div>
+    <div style="margin-top:6px">${rows}</div></div>`;
+}
 
 /* ================= Formato de cantidades ================= */
 function fmtQty(id, q) {
@@ -91,6 +123,7 @@ function vHoy() {
   return `<div class="head"><div><div class="eyebrow">${esc(dateTxt.charAt(0).toUpperCase() + dateTxt.slice(1))}</div><h1>${tx('Hoy')}</h1></div>
     <button class="icon-btn" data-act="settings" aria-label="${tx('Ajustes')}">${icon('settings')}</button></div>
   ${train}
+  ${habitsCard()}
   <a class="card tap home-card" href="#/comida" data-act="goFood">
     <div class="card-title"><div><div class="eyebrow">${tx('Próxima comida')} · ${esc(next.name)}</div><h3>${esc(next.title)}</h3></div><span class="pill">${fmtNum(next.kcal, 0)} kcal</span></div>
     <ul class="food-list">${next.items.map((x) => `<li><span>${esc(FOODS[x.id].name)}</span><b>${fmtQty(x.id, x.q)}</b></li>`).join('')}</ul>
@@ -233,6 +266,12 @@ const A = {
   pick({ g, v }) { UI.train = [g, v]; render(); },
   goTrain() { if (WEEK_ROUTINE[today]) UI.train = WEEK_ROUTINE[today]; location.hash = '#/entreno'; },
   goFood() { UI.foodDay = today; location.hash = '#/comida'; },
+  habit({ h }) {
+    const k = todayKey();
+    const day = (S.habits[k] ||= {});
+    day[h] = !day[h];
+    save(); render();
+  },
   toggle({ id }) {
     const k = todayKey();
     S.done = { [k]: { ...(S.done[k] || {}) } }; // solo se guarda el día de hoy

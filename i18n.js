@@ -32,6 +32,9 @@ const UI_PT = {
   'Aprovechá para caminar y recuperarte. Mañana arrancás de nuevo.': 'Aproveite para caminhar e se recuperar. Amanhã você recomeça.',
   'Próxima comida': 'Próxima refeição', 'Comidas de hoy': 'Refeições de hoje', 'Te faltan {n} productos': 'Faltam {n} produtos',
   'Tenés todo lo de la lista ✓': 'Você tem tudo da lista ✓',
+  'Hábitos': 'Hábitos', 'Meditar': 'Meditar', 'Leer': 'Ler', 'Estudiar': 'Estudar', 'Journaling': 'Journaling',
+  '1 día seguido': '1 dia seguido', '{n} días seguidos': '{n} dias seguidos', 'Empezá hoy': 'Comece hoje',
+  'Todo hecho hoy ✓': 'Tudo feito hoje ✓', '{a} de {b} hoy': '{a} de {b} hoje',
   'Ingresá un número entre 1500 y 5000': 'Informe um número entre 1500 e 5000', 'Plan ajustado a {k} kcal': 'Plano ajustado para {k} kcal',
 };
 

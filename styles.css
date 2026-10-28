@@ -382,3 +382,14 @@ body.in-session .tabbar { display: none; }
 .day-meals li.now span:first-child { color: var(--accent); font-weight: 600; }
 .day-meals b { font-variant-numeric: tabular-nums; font-size: 13px; }
 .home-card.row { display: flex; align-items: center; }
+
+/* ---------- Hábitos ---------- */
+.habit-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 0; }
+.habit-row + .habit-row { border-top: 1px solid var(--line); }
+.habit-row .grow { display: flex; flex-direction: column; gap: 2px; }
+.habit-name { font-weight: 500; }
+.habit-row.done .ex-check { background: var(--accent); color: var(--accent-ink); }
+.habit-dots { display: flex; gap: 4px; }
+.habit-dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--surface-2); }
+.habit-dots i.on { background: var(--accent); }
+.habit-dots i:last-child { box-shadow: 0 0 0 1.5px var(--faint); }
