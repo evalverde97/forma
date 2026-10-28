@@ -1,6 +1,6 @@
 // Cache del "app shell" para que funcione sin internet.
 // Subí CACHE cada vez que publiques cambios, así el iPhone toma la versión nueva.
-const CACHE = 'forma-v5';
+const CACHE = 'forma-v6';
 const ASSETS = [
   './', './index.html', './styles.css', './app.js', './catalog.js', './routine.js', './food.js', './i18n.js', './manifest.webmanifest',
   './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png',

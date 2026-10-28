@@ -28,6 +28,10 @@ const UI_PT = {
   'Ver videos en YouTube': 'Ver vídeos no YouTube', 'Idioma': 'Idioma', 'Calorías por día': 'Calorias por dia',
   'Las porciones del plan y la lista de compras se ajustan a este número.': 'As porções do plano e a lista de compras se ajustam a este número.',
   'Guardar': 'Salvar', 'Imágenes de ejercicios: Free Exercise DB (dominio público).': 'Imagens dos exercícios: Free Exercise DB (domínio público).',
+  'Entreno de hoy': 'Treino de hoje', 'Completo ✓': 'Completo ✓', 'y {n} más': 'e mais {n}', 'Descanso': 'Descanso',
+  'Aprovechá para caminar y recuperarte. Mañana arrancás de nuevo.': 'Aproveite para caminhar e se recuperar. Amanhã você recomeça.',
+  'Próxima comida': 'Próxima refeição', 'Comidas de hoy': 'Refeições de hoje', 'Te faltan {n} productos': 'Faltam {n} produtos',
+  'Tenés todo lo de la lista ✓': 'Você tem tudo da lista ✓',
   'Ingresá un número entre 1500 y 5000': 'Informe um número entre 1500 e 5000', 'Plan ajustado a {k} kcal': 'Plano ajustado para {k} kcal',
 };
 

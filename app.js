@@ -54,6 +54,57 @@ function fmtQty(id, q) {
 const head = (title, sub) => `<div class="head"><div><div class="eyebrow">${sub}</div><h1>${title}</h1></div>
   <button class="icon-btn" data-act="settings" aria-label="${tx('Ajustes')}">${icon('settings')}</button></div>`;
 
+// Comida que corresponde según la hora del día
+const nextMealKey = () => { const h = new Date().getHours(); return h < 11 ? 'desayuno' : h < 16 ? 'almuerzo' : h < 19 ? 'merienda' : 'cena'; };
+
+function vHoy() {
+  const now = new Date();
+  const dateTxt = now.toLocaleDateString(LOCALE, { weekday: 'long', day: 'numeric', month: 'long' });
+  const r = WEEK_ROUTINE[today];
+  const done = S.done[todayKey()] || {};
+
+  let train;
+  if (r) {
+    const day = ROUTINE[r[0]], list = day[r[1]];
+    const n = list.filter(([id]) => done[id]).length;
+    const pct = Math.round((n / list.length) * 100);
+    train = `<a class="card tap home-card" href="#/entreno" data-act="goTrain">
+      <div class="card-title"><div><div class="eyebrow">${tx('Entreno de hoy')}</div><h3 style="color:${day.color}">${esc(day.name)} · ${r[1]}</h3></div>
+        <span class="pill">${n === list.length ? tx('Completo ✓') : `${n}/${list.length}`}</span></div>
+      <div class="bar-track"><div style="width:${pct}%;background:${day.color}"></div></div>
+      <p class="muted small" style="margin:10px 0 0">${list.slice(0, 3).map(([id]) => esc(CATALOG[id].name)).join(' · ')}${list.length > 3 ? ` · ${tx('y {n} más', { n: list.length - 3 })}` : ''}</p>
+    </a>`;
+  } else {
+    train = `<div class="card home-card"><div class="eyebrow">${tx('Entreno de hoy')}</div><h3>${tx('Descanso')}</h3>
+      <p class="muted small" style="margin:6px 0 0">${tx('Aprovechá para caminar y recuperarte. Mañana arrancás de nuevo.')}</p></div>`;
+  }
+
+  const plan = dayPlan(today, S.kcal);
+  const nk = nextMealKey();
+  const next = plan.meals.find((m) => m.key === nk);
+  const meals = plan.meals.map((m) => `<li class="${m.key === nk ? 'now' : ''}"><span>${esc(m.name)}</span><span class="muted">${esc(m.title)}</span><b>${fmtNum(m.kcal, 0)}</b></li>`).join('');
+
+  const shop = shoppingList(S.kcal, S.shop.period === 'mes' ? 30 / 7 : 1);
+  const got = S.shop.got[S.shop.period] || {};
+  const missing = shop.filter((x) => !got[x.id]).length;
+
+  return `<div class="head"><div><div class="eyebrow">${esc(dateTxt.charAt(0).toUpperCase() + dateTxt.slice(1))}</div><h1>${tx('Hoy')}</h1></div>
+    <button class="icon-btn" data-act="settings" aria-label="${tx('Ajustes')}">${icon('settings')}</button></div>
+  ${train}
+  <a class="card tap home-card" href="#/comida" data-act="goFood">
+    <div class="card-title"><div><div class="eyebrow">${tx('Próxima comida')} · ${esc(next.name)}</div><h3>${esc(next.title)}</h3></div><span class="pill">${fmtNum(next.kcal, 0)} kcal</span></div>
+    <ul class="food-list">${next.items.map((x) => `<li><span>${esc(FOODS[x.id].name)}</span><b>${fmtQty(x.id, x.q)}</b></li>`).join('')}</ul>
+  </a>
+  <a class="card tap home-card" href="#/comida" data-act="goFood">
+    <div class="card-title"><h3>${tx('Comidas de hoy')}</h3><span class="muted small">${fmtNum(plan.kcal, 0)} kcal · ${fmtNum(plan.prot, 0)} g ${tx('proteína')}</span></div>
+    <ul class="day-meals">${meals}</ul>
+  </a>
+  <a class="card tap home-card row between" href="#/compras">
+    <div><div class="eyebrow">${tx('Compras')}</div><h3>${missing ? tx('Te faltan {n} productos', { n: missing }) : tx('Tenés todo lo de la lista ✓')}</h3></div>
+    <span class="muted small">${S.shop.period === 'mes' ? tx('Mes') : tx('Semana')}</span>
+  </a>`;
+}
+
 function vEntreno() {
   const [g, v] = UI.train;
   const day = ROUTINE[g];
@@ -180,6 +231,8 @@ function settingsSheet() {
 const A = {
   closeSheet,
   pick({ g, v }) { UI.train = [g, v]; render(); },
+  goTrain() { if (WEEK_ROUTINE[today]) UI.train = WEEK_ROUTINE[today]; location.hash = '#/entreno'; },
+  goFood() { UI.foodDay = today; location.hash = '#/comida'; },
   toggle({ id }) {
     const k = todayKey();
     S.done = { [k]: { ...(S.done[k] || {}) } }; // solo se guarda el día de hoy
@@ -217,10 +270,10 @@ document.addEventListener('click', (e) => {
 });
 
 /* ================= Router ================= */
-const VIEWS = { entreno: vEntreno, comida: vComida, compras: vCompras };
+const VIEWS = { hoy: vHoy, entreno: vEntreno, comida: vComida, compras: vCompras };
 function render() {
   const r = location.hash.slice(2).split('/')[0];
-  const view = VIEWS[r] ? r : 'entreno';
+  const view = VIEWS[r] ? r : 'hoy';
   $$('.tabbar a').forEach((x) => x.classList.toggle('on', x.dataset.tab === view));
   $('#view').innerHTML = VIEWS[view]();
 }

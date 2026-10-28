@@ -1,7 +1,7 @@
 {
   "name": "Forma — Gym y alimentación",
   "short_name": "Forma",
-  "start_url": "./#/entreno",
+  "start_url": "./#/hoy",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

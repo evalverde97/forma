@@ -369,3 +369,16 @@ body.in-session .tabbar { display: none; }
 .shop-row .grow { display: flex; flex-direction: column; gap: 2px; }
 .shop-row b { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .wk-day b small { font-size: 9px; color: var(--muted); margin-left: 1px; }
+
+/* ---------- Hoy ---------- */
+.home-card { display: block; }
+.home-card .eyebrow { color: var(--accent); font-weight: 600; }
+.bar-track { height: 6px; border-radius: 3px; background: var(--surface-2); margin-top: 12px; overflow: hidden; }
+.bar-track > div { height: 100%; border-radius: 3px; transition: width .3s; }
+.day-meals { list-style: none; margin: 8px 0 0; padding: 0; }
+.day-meals li { display: grid; grid-template-columns: 86px 1fr auto; gap: 10px; align-items: baseline; padding: 8px 0; font-size: 14px; }
+.day-meals li + li { border-top: 1px solid var(--line); }
+.day-meals li span.muted { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.day-meals li.now span:first-child { color: var(--accent); font-weight: 600; }
+.day-meals b { font-variant-numeric: tabular-nums; font-size: 13px; }
+.home-card.row { display: flex; align-items: center; }
