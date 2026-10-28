@@ -337,3 +337,35 @@ body.in-session .tabbar { display: none; }
 .mini:first-child input { width: 64px; text-align: center; }
 .mini input:focus { box-shadow: inset 0 0 0 1.5px var(--accent); }
 .choice { justify-content: flex-start; }
+
+/* ---------- Versión simple ---------- */
+.week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.wk-day { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 0; border-radius: 12px; background: var(--surface); font-size: 11px; color: var(--muted); }
+.wk-day i { width: 6px; height: 6px; border-radius: 50%; }
+.wk-day b { font-size: 12px; color: var(--text); }
+.wk-day.now { box-shadow: inset 0 0 0 1.5px var(--text); }
+.wk-day.sel { background: var(--surface-2); }
+.wk-day:disabled { opacity: .5; }
+.list-card { padding: 10px 12px; margin-top: 12px; }
+.ex-row { display: flex; align-items: center; gap: 10px; padding: 10px 2px; }
+.ex-row + .ex-row, .shop-row + .shop-row { border-top: 1px solid var(--line); }
+.ex-check { width: 30px; height: 30px; border-radius: 50%; flex: none; display: grid; place-items: center; background: var(--surface-2); color: var(--muted); font-size: 13px; font-weight: 700; }
+.ex-check svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.ex-row.done .ex-check, .shop-row.done .ex-check { background: var(--accent); color: var(--accent-ink); }
+.ex-row.done .ex-name, .shop-row.done .shop-name { text-decoration: line-through; color: var(--muted); }
+.ex-main { text-align: left; min-width: 0; }
+.ex-sets { font-weight: 700; font-size: 14px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.day-chips { margin-bottom: 12px; }
+.day-chips button { flex: 1; text-align: center; padding: 8px 0; }
+.totals { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
+.totals b { display: block; font-size: 20px; letter-spacing: -0.02em; }
+.totals span { font-size: 12px; color: var(--muted); }
+.meal .eyebrow { color: var(--accent); font-weight: 600; }
+.food-list { list-style: none; margin: 10px 0 0; padding: 0; }
+.food-list li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 15px; }
+.food-list li + li { border-top: 1px solid var(--line); }
+.food-list b { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.shop-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 11px 2px; }
+.shop-row .grow { display: flex; flex-direction: column; gap: 2px; }
+.shop-row b { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.wk-day b small { font-size: 9px; color: var(--muted); margin-left: 1px; }
